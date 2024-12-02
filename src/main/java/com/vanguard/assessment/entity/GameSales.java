@@ -9,27 +9,27 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(schema = "vanguard", name = "game_sales")
+@Table(name = "game_sales")
 public class GameSales extends BaseEntity {
 
     @Id
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     private Long id;
-    @Column(name = "game_no")
+    @Column(name = "game_no", nullable = false)
     private Integer gameNo;
-    @Column(name = "game_name")
+    @Column(name = "game_name", nullable = false, length = 32)
     private String gameName;
-    @Column(name = "game_code")
+    @Column(name = "game_code", nullable = false, length = 10)
     private String gameCode;
-    @Column(name = "type")
+    @Column(name = "type", nullable = false)
     private Integer type;
-    @Column(name = "cost_price")
+    @Column(name = "cost_price", nullable = false)
     private BigDecimal costPrice;
-    @Column(name = "tax")
+    @Column(name = "tax", nullable = false)
     private BigDecimal tax;
-    @Column(name = "sale_price")
+    @Column(name = "sale_price", nullable = false)
     private BigDecimal salePrice;
-    @Column(name = "date_of_sale")
+    @Column(name = "date_of_sale", nullable = false)
     private LocalDateTime dateOfSale;
 
 

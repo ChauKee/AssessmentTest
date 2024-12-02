@@ -7,8 +7,11 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum AggregateType {
 
-    DAILY("daily"), WEEKLY("weekly"), MONTHLY("monthly"), YEARLY("yealy");
-
+    DAILY("daily"),
+    WEEKLY("weekly"),
+    MONTHLY("monthly"),
+    YEARLY("yealy"),
+    ;
     private final String value;
 
 }

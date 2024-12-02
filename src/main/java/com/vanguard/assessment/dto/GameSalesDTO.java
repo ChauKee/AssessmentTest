@@ -1,9 +1,7 @@
 package com.vanguard.assessment.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -21,6 +19,5 @@ public class GameSalesDTO {
     private BigDecimal tax;
     private BigDecimal salePrice;
     private String dateOfSale;
-
 
 }

@@ -11,14 +11,13 @@ import java.util.Optional;
 import static com.vanguard.assessment.constant.Constants.GameName;
 import static com.vanguard.assessment.constant.Constants.GameCode;
 
-@AllArgsConstructor
 @Getter
+@AllArgsConstructor
 public enum Game {
 
     ABC(1, GameName.ABC, GameCode.ABC, GameType.ONLINE, BigDecimal.valueOf(9.99)),
     DEF(2, GameName.DEF, GameCode.DEF, GameType.OFFLINE, BigDecimal.valueOf(49.99)),
-    GHI(3, GameName.GHI, GameCode.GHI, GameType.OFFLINE, BigDecimal.valueOf(13.99))
-
+    GHI(3, GameName.GHI, GameCode.GHI, GameType.OFFLINE, BigDecimal.valueOf(13.99)),
     ;
     private final int number;
     private final String name;

@@ -15,10 +15,11 @@ import java.time.LocalDate;
 @Getter @Setter
 public class TotalDailySales {
     @Id
+    @Column(name = "date", nullable = false)
     private LocalDate date;
-    @Column(name = "total_sales")
+    @Column(name = "total_sales", nullable = false)
     private BigDecimal totalSales;
-    @Column(name = "quantity_sold")
+    @Column(name = "quantity_sold", nullable = false)
     private Long quantitySold;
 
 }

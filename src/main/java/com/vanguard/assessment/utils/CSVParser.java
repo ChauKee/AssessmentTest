@@ -12,22 +12,39 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import org.apache.commons.text.CaseUtils;
 
 public class CSVParser {
 
-    private static final String[] HEADERS = {
+    public static final String[] DEFAULT_CSV_HEADERS = {
             "id", "game_no", "game_name", "game_code", "type",
             "cost_price", "tax", "sale_price", "date_of_sale"
     };
 
+    public static final BiFunction<String, String, Object> DEFAULT_CONVERSION  = (header, value) -> {
+        if ("id".equals(header))
+            return Long.parseLong(value);
+        if ("game_no".equals(header))
+            return Integer.parseInt(value);
+        if ("game_name".equals(header))
+            return value;
+        if ("game_code".equals(header))
+            return value;
+        if ("type".equals(header))
+            return Integer.parseInt(value);
+        if ("cost_price".equals(header))
+            return new BigDecimal(value);
+        if ("tax".equals(header))
+            return new BigDecimal(value.replace("%", ""))
+                    .divide(BigDecimal.valueOf(100L));
+        if ("sale_price".equals(header))
+            return new BigDecimal(value);;
+        if ("date_of_sale".equals(header))
+            return LocalDateTime.parse(value, DateTimeUtils.DATE_TIME_FORMATTER);
+        return value;
+    };
 
 
     public static List<Map<String, Object>> parse(InputStream in, String[] headers, BiFunction<String, String, Object> conversion) throws IOException {
@@ -43,8 +60,9 @@ public class CSVParser {
         for (CSVRecord record : records) {
             values = new HashMap<>();
             for(String header : headers) {
+                String camelCaseHeader = CaseUtils.toCamelCase(header,false, '_');
                 String value = record.get(header);
-                values.put(header, conversion.apply(header, value));
+                values.put(camelCaseHeader, conversion.apply(header, value));
             }
             results.add(values);
         }
@@ -54,9 +72,8 @@ public class CSVParser {
 
     public static void main(String[] args) throws Exception {
         ClassPathResource cpr = new ClassPathResource("test_game_sales.csv");
-        DateTimeFormatter DTF = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
 
-        List<Map<String, Object>> results = CSVParser.parse(cpr.getInputStream(), HEADERS, (header, value) -> {
+        List<Map<String, Object>> results = CSVParser.parse(cpr.getInputStream(), DEFAULT_CSV_HEADERS, (header, value) -> {
             if ("id".equals(header))
                 return Long.parseLong(value);
             if ("game_no".equals(header))
@@ -75,7 +92,7 @@ public class CSVParser {
             if ("sale_price".equals(header))
                 return new BigDecimal(value);;
             if ("date_of_sale".equals(header))
-                return LocalDateTime.parse(value, DTF);
+                return LocalDateTime.parse(value, DateTimeUtils.DATE_TIME_FORMATTER);
             return value;
         });
         results = results.stream().map(map -> {

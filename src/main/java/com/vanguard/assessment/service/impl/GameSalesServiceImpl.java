@@ -3,8 +3,12 @@ package com.vanguard.assessment.service.impl;
 import com.vanguard.assessment.constant.Game;
 import com.vanguard.assessment.constant.GameType;
 import com.vanguard.assessment.dto.*;
-import com.vanguard.assessment.entity.*;
-import com.vanguard.assessment.repository.*;
+import com.vanguard.assessment.entity.GameDailySales;
+import com.vanguard.assessment.entity.GameSales;
+import com.vanguard.assessment.entity.TotalDailySales;
+import com.vanguard.assessment.repository.GameDailySalesRepository;
+import com.vanguard.assessment.repository.GameSalesRepository;
+import com.vanguard.assessment.repository.TotalDailySalesRepository;
 import com.vanguard.assessment.service.GameSalesService;
 import com.vanguard.assessment.utils.DateTimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,15 +31,21 @@ public class GameSalesServiceImpl implements GameSalesService {
 
     private GameDailySalesRepository gameDailySalesRepository;
 
+    private TotalDailySalesRepository totalDailySalesRepository;
+
 
     @Override
     public GameSalesQueryResult<GameSalesDTO> getGameSales(GameSalesCriteria criteria, Pageable page) {
+        // if fromSalePrice is missing, we use 0 (inclusive) as fromSalePrice
         BigDecimal salePriceStart = Objects.isNull(criteria.getFromSalePrice()) ?
                 BigDecimal.ZERO : criteria.getFromSalePrice();
+        // if toSalePrice is missing, we use Integer.MAX_VALUE as toSalePrice
         BigDecimal salePriceEnd = Objects.isNull(criteria.getToSalePrice()) ?
                 BigDecimal.valueOf(Integer.MAX_VALUE) : criteria.getToSalePrice();
 
+        // if toDate is missing, by default we use today as toDate
         LocalDate toDate = Objects.isNull(criteria.getToDate()) ? LocalDate.now() : criteria.getToDate();
+        // if fromDate is missing, by default we use 1 week before from toDate
         LocalDate fromDate = Objects.isNull(criteria.getFromDate()) ? toDate.minusDays(7) : criteria.getFromDate();
 
         Page<GameSales> results = gameSalesRepository.findBySalePriceBetweenAndDateOfSaleBetweenOrderById(
@@ -43,14 +53,14 @@ public class GameSalesServiceImpl implements GameSalesService {
         List<GameSalesDTO> dtos = results.stream().map(GameSalesServiceImpl::toDTO).toList();
         GameSalesQueryResult<GameSalesDTO> result = GameSalesQueryResult.<GameSalesDTO>builder()
                 .data(dtos)
-                .fromDate(Objects.nonNull(criteria.getFromDate()) ? criteria.getFromDate().format(DateTimeUtils.DATE_FORMATTER) : null)
-                .toDate(Objects.nonNull(criteria.getToDate()) ? criteria.getToDate().format(DateTimeUtils.DATE_FORMATTER) : null)
+                .fromDate(fromDate.format(DateTimeUtils.DATE_FORMATTER)) // return resolved fromDate to FE
+                .toDate(toDate.format(DateTimeUtils.DATE_FORMATTER)) // return resolved toDate to FE
                 .page(PageDTO.builder()
-                        .page(results.getNumber() + 1)
+                        .page(results.getNumber() + 1) // add 1 back because FE is 1-based, backend is zero-based
                         .pageSize(results.getSize())
                         .totalPages(results.getTotalPages())
                         .total(results.getTotalElements())
-                        .build())
+                        .build()) // return page object for FE pagination feature
                 .build();
 
         return result;
@@ -76,59 +86,41 @@ public class GameSalesServiceImpl implements GameSalesService {
         LocalDate fromDate = criteria.getFromDate();
         LocalDate toDate = criteria.getToDate();
         Integer gameNo = criteria.getGameNo();
-        Integer frequency = criteria.getFrequency();
+
         AggregateGameSalesQueryResult.AggregateGameSalesQueryResultBuilder<AggregatedGameSalesDTO> builder =
                 AggregateGameSalesQueryResult.<AggregatedGameSalesDTO>builder()
                         .fromDate(Objects.nonNull(fromDate) ? fromDate.format(DATE_FORMATTER) : null)
                         .toDate(Objects.nonNull(toDate) ? toDate.format(DATE_FORMATTER) : null)
                         .gameNo(gameNo);
 
-//        if (frequency == 1) {
-            toDate = Objects.isNull(toDate) ? LocalDate.now() : toDate;
-            fromDate = Objects.isNull(fromDate) ? toDate.minusDays(7) : fromDate;
-            if (Objects.nonNull(gameNo)) {
-                List<AggregatedGameSalesDTO> gameDailySales = gameDailySalesRepository.findByGameNoAndDateBetweenOrderByDate(
-                        gameNo, fromDate, toDate).stream().map(this::toAggregateDTO).toList();
-                builder.data(gameDailySales);
-                builder.totalSales(gameDailySales.stream().map(AggregatedGameSalesDTO::getTotalSales).reduce(BigDecimal.ZERO, BigDecimal::add));
-                builder.quantitySold(gameDailySales.stream().map(AggregatedGameSalesDTO::getQuantitySold).reduce(0L, Long::sum));
-            } else {
-                List<AggregatedGameSalesDTO> gameDailySales = gameDailySalesRepository.findByDateBetweenOrderByDate(
-                        fromDate, toDate).stream().map(this::toAggregateDTO).toList();
-                builder.data(gameDailySales);
-                builder.totalSales(gameDailySales.stream().map(AggregatedGameSalesDTO::getTotalSales).reduce(BigDecimal.ZERO, BigDecimal::add));
-                builder.quantitySold(gameDailySales.stream().map(AggregatedGameSalesDTO::getQuantitySold).reduce(0L, Long::sum));
-            }
-//        } else if (frequency == 2) {
-//            toDate = Objects.isNull(toDate) ? LocalDate.now() : toDate;
-//            fromDate = Objects.isNull(fromDate) ? toDate.minusMonths(3) : fromDate;
-//            if (Objects.nonNull(gameNo)) {
-//                List<AggregatedGameSalesDTO> gameDailySales = gameMonthlySalesRepository.findByGameNoAndDateBetweenOrderByDate(
-//                        gameNo, fromDate, toDate).stream().map(this::toAggregateDTO).toList();
-//                builder.data(gameDailySales);
-//                builder.totalSales(gameDailySales.stream().map(AggregatedGameSalesDTO::getTotalSales).reduce(BigDecimal.ZERO, BigDecimal::add));
-//                builder.quantitySold(gameDailySales.stream().map(AggregatedGameSalesDTO::getQuantitySold).reduce(0L, Long::sum));
-//            } else {
-//                List<AggregatedGameSalesDTO> gameDailySales = totalMonthlySalesRepository.findByDateBetweenOrderByDate(
-//                        fromDate, toDate).stream().map(this::toAggregateDTO).toList();
-//                builder.data(gameDailySales);
-//                builder.totalSales(gameDailySales.stream().map(AggregatedGameSalesDTO::getTotalSales).reduce(BigDecimal.ZERO, BigDecimal::add));
-//                builder.quantitySold(gameDailySales.stream().map(AggregatedGameSalesDTO::getQuantitySold).reduce(0L, Long::sum));
-//            }
-//        }
+        toDate = Objects.isNull(toDate) ? LocalDate.now() : toDate;
+        fromDate = Objects.isNull(fromDate) ? toDate.minusDays(7) : fromDate;
+        if (Objects.nonNull(gameNo)) {
+            List<AggregatedGameSalesDTO> gameDailySales = gameDailySalesRepository.findByGameNoAndDateBetweenOrderByDate(
+                    gameNo, fromDate, toDate).stream().map(this::toAggregateDTO).toList();
+            builder.data(gameDailySales);
+            builder.totalSales(gameDailySales.stream().map(AggregatedGameSalesDTO::getTotalSales).reduce(BigDecimal.ZERO, BigDecimal::add));
+            builder.quantitySold(gameDailySales.stream().map(AggregatedGameSalesDTO::getQuantitySold).reduce(0L, Long::sum));
+        } else {
+            List<AggregatedGameSalesDTO> gameDailySales = totalDailySalesRepository.findByDateBetweenOrderByDate(
+                    fromDate, toDate).stream().map(this::toAggregateDTO).toList();
+            builder.data(gameDailySales);
+            builder.totalSales(gameDailySales.stream().map(AggregatedGameSalesDTO::getTotalSales).reduce(BigDecimal.ZERO, BigDecimal::add));
+            builder.quantitySold(gameDailySales.stream().map(AggregatedGameSalesDTO::getQuantitySold).reduce(0L, Long::sum));
+        }
         return builder.build();
     }
 
 
-//    private AggregatedGameSalesDTO toAggregateDTO(TotalDailySales totalDailySales) {
-//        return AggregatedGameSalesDTO.builder()
-//                .gameName(null)
-//                .gameNo(null)
-//                .date(totalDailySales.getDate().format(DATE_FORMATTER))
-//                .totalSales(totalDailySales.getTotalSales())
-//                .quantitySold(totalDailySales.getQuantitySold())
-//                .build();
-//    }
+    private AggregatedGameSalesDTO toAggregateDTO(TotalDailySales totalDailySales) {
+        return AggregatedGameSalesDTO.builder()
+                .gameName(null)
+                .gameNo(null)
+                .date(totalDailySales.getDate().format(DATE_FORMATTER))
+                .totalSales(totalDailySales.getTotalSales())
+                .quantitySold(totalDailySales.getQuantitySold())
+                .build();
+    }
 
     private AggregatedGameSalesDTO toAggregateDTO(GameDailySales gameDailySales) {
         return AggregatedGameSalesDTO.builder()
@@ -139,26 +131,6 @@ public class GameSalesServiceImpl implements GameSalesService {
                 .quantitySold(gameDailySales.getQuantitySold())
                 .build();
     }
-
-//    private AggregatedGameSalesDTO toAggregateDTO(TotalMonthlySales totalMonthlySales) {
-//        return AggregatedGameSalesDTO.builder()
-//                .gameNo(null)
-//                .gameName(null)
-//                .date(totalMonthlySales.getDate().format(DATE_FORMATTER))
-//                .totalSales(totalMonthlySales.getTotalSales())
-//                .quantitySold(totalMonthlySales.getQuantitySold())
-//                .build();
-//    }
-//
-//    private AggregatedGameSalesDTO toAggregateDTO(GameMonthlySales gameMonthlySales) {
-//        return AggregatedGameSalesDTO.builder()
-//                .gameNo(gameMonthlySales.getGameNo())
-//                .gameName(resolveGameNameFromGameNo(gameMonthlySales.getGameNo()))
-//                .date(gameMonthlySales.getDate().format(DATE_FORMATTER))
-//                .totalSales(gameMonthlySales.getTotalSales())
-//                .quantitySold(gameMonthlySales.getQuantitySold())
-//                .build();
-//    }
 
     protected String resolveGameNameFromGameNo(Integer gameNo) {
         return Game.fromGameNo(gameNo)
@@ -174,6 +146,11 @@ public class GameSalesServiceImpl implements GameSalesService {
     @Autowired
     public void setGameDailySalesRepository(GameDailySalesRepository gameDailySalesRepository) {
         this.gameDailySalesRepository = gameDailySalesRepository;
+    }
+
+    @Autowired
+    public void setTotalDailySalesRepository(TotalDailySalesRepository totalDailySalesRepository) {
+        this.totalDailySalesRepository = totalDailySalesRepository;
     }
 
 }

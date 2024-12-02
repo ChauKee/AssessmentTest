@@ -16,12 +16,13 @@ import java.time.LocalDate;
 public class GameDailySales {
 
     @Id
+    @Column(name = "date", nullable = false)
     private LocalDate date;
-    @Column(name = "game_no")
+    @Column(name = "game_no", nullable = false)
     private Integer gameNo;
-    @Column(name = "total_sales")
+    @Column(name = "total_sales", nullable = false)
     private BigDecimal totalSales;
-    @Column(name = "quantity_sold")
+    @Column(name = "quantity_sold", nullable = false)
     private Long quantitySold;
 
 }

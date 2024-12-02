@@ -56,7 +56,7 @@ public class CSVGenerator {
                 int miliseconds = random.nextInt(1000);
                 String milisecondStr = miliseconds < 10 ? "00" + miliseconds :
                         miliseconds < 100 ? "0" + miliseconds : String.valueOf(miliseconds);
-                String dateOfSale = String.format("2024-04-%sT%s:%s:%s.%s",
+                String dateOfSale = String.format("2024-04-%sT%s:%s:%s.%sZ",
                         dayStr, hourStr, minuteStr, secondStr, milisecondStr);
 //                System.out.println(dateOfSale);
                 try {
@@ -72,7 +72,7 @@ public class CSVGenerator {
     public static void main(String[] args) {
         long start = System.currentTimeMillis();
         try {
-            CSVGenerator.generateCsv(100);
+            CSVGenerator.generateCsv(1000);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,9 +1,6 @@
 package com.vanguard.assessment.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,10 +10,12 @@ import lombok.Setter;
 public class CsvImport extends BaseEntity {
 
     @Id
+    @Column(name = "id", nullable = false, length = 36)
     private String id;
-    @Column(name = "file_path")
+    @Column(name = "file_path", nullable = false, length = 100)
     private String filepath;
-    @Column(name = "status")
-    private String status;
-
+    @Column(name = "status", nullable = false)
+    private Integer status;
+    @Column(name = "error", length = 500)
+    private String error;
 }
