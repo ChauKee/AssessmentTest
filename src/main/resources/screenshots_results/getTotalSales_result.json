@@ -1,0 +1,219 @@
+{
+    "fromDate": "2024-04-01",
+    "toDate": "2024-04-30",
+    "gameNo": 1,
+    "totalSales": 3627720.36,
+    "quantitySold": 333124,
+    "data": [
+        {
+            "date": "2024-04-01",
+            "gameNo": 1,
+            "gameName": "ABC Name",
+            "totalSales": 120889.89,
+            "quantitySold": 11101
+        },
+        {
+            "date": "2024-04-02",
+            "gameNo": 1,
+            "gameName": "ABC Name",
+            "totalSales": 120105.81,
+            "quantitySold": 11029
+        },
+        {
+            "date": "2024-04-03",
+            "gameNo": 1,
+            "gameName": "ABC Name",
+            "totalSales": 121183.92,
+            "quantitySold": 11128
+        },
+        {
+            "date": "2024-04-04",
+            "gameNo": 1,
+            "gameName": "ABC Name",
+            "totalSales": 119986.02,
+            "quantitySold": 11018
+        },
+        {
+            "date": "2024-04-05",
+            "gameNo": 1,
+            "gameName": "ABC Name",
+            "totalSales": 121434.39,
+            "quantitySold": 11151
+        },
+        {
+            "date": "2024-04-06",
+            "gameNo": 1,
+            "gameName": "ABC Name",
+            "totalSales": 122654.07,
+            "quantitySold": 11263
+        },
+        {
+            "date": "2024-04-07",
+            "gameNo": 1,
+            "gameName": "ABC Name",
+            "totalSales": 119975.13,
+            "quantitySold": 11017
+        },
+        {
+            "date": "2024-04-08",
+            "gameNo": 1,
+            "gameName": "ABC Name",
+            "totalSales": 121227.48,
+            "quantitySold": 11132
+        },
+        {
+            "date": "2024-04-09",
+            "gameNo": 1,
+            "gameName": "ABC Name",
+            "totalSales": 120410.73,
+            "quantitySold": 11057
+        },
+        {
+            "date": "2024-04-10",
+            "gameNo": 1,
+            "gameName": "ABC Name",
+            "totalSales": 120486.96,
+            "quantitySold": 11064
+        },
+        {
+            "date": "2024-04-11",
+            "gameNo": 1,
+            "gameName": "ABC Name",
+            "totalSales": 120726.54,
+            "quantitySold": 11086
+        },
+        {
+            "date": "2024-04-12",
+            "gameNo": 1,
+            "gameName": "ABC Name",
+            "totalSales": 120748.32,
+            "quantitySold": 11088
+        },
+        {
+            "date": "2024-04-13",
+            "gameNo": 1,
+            "gameName": "ABC Name",
+            "totalSales": 122022.45,
+            "quantitySold": 11205
+        },
+        {
+            "date": "2024-04-14",
+            "gameNo": 1,
+            "gameName": "ABC Name",
+            "totalSales": 120378.06,
+            "quantitySold": 11054
+        },
+        {
+            "date": "2024-04-15",
+            "gameNo": 1,
+            "gameName": "ABC Name",
+            "totalSales": 120900.78,
+            "quantitySold": 11102
+        },
+        {
+            "date": "2024-04-16",
+            "gameNo": 1,
+            "gameName": "ABC Name",
+            "totalSales": 120258.27,
+            "quantitySold": 11043
+        },
+        {
+            "date": "2024-04-17",
+            "gameNo": 1,
+            "gameName": "ABC Name",
+            "totalSales": 121173.03,
+            "quantitySold": 11127
+        },
+        {
+            "date": "2024-04-18",
+            "gameNo": 1,
+            "gameName": "ABC Name",
+            "totalSales": 120084.03,
+            "quantitySold": 11027
+        },
+        {
+            "date": "2024-04-19",
+            "gameNo": 1,
+            "gameName": "ABC Name",
+            "totalSales": 119539.53,
+            "quantitySold": 10977
+        },
+        {
+            "date": "2024-04-20",
+            "gameNo": 1,
+            "gameName": "ABC Name",
+            "totalSales": 120421.62,
+            "quantitySold": 11058
+        },
+        {
+            "date": "2024-04-21",
+            "gameNo": 1,
+            "gameName": "ABC Name",
+            "totalSales": 122403.60,
+            "quantitySold": 11240
+        },
+        {
+            "date": "2024-04-22",
+            "gameNo": 1,
+            "gameName": "ABC Name",
+            "totalSales": 120584.97,
+            "quantitySold": 11073
+        },
+        {
+            "date": "2024-04-23",
+            "gameNo": 1,
+            "gameName": "ABC Name",
+            "totalSales": 121597.74,
+            "quantitySold": 11166
+        },
+        {
+            "date": "2024-04-24",
+            "gameNo": 1,
+            "gameName": "ABC Name",
+            "totalSales": 122076.90,
+            "quantitySold": 11210
+        },
+        {
+            "date": "2024-04-25",
+            "gameNo": 1,
+            "gameName": "ABC Name",
+            "totalSales": 122033.34,
+            "quantitySold": 11206
+        },
+        {
+            "date": "2024-04-26",
+            "gameNo": 1,
+            "gameName": "ABC Name",
+            "totalSales": 120410.73,
+            "quantitySold": 11057
+        },
+        {
+            "date": "2024-04-27",
+            "gameNo": 1,
+            "gameName": "ABC Name",
+            "totalSales": 120824.55,
+            "quantitySold": 11095
+        },
+        {
+            "date": "2024-04-28",
+            "gameNo": 1,
+            "gameName": "ABC Name",
+            "totalSales": 119223.72,
+            "quantitySold": 10948
+        },
+        {
+            "date": "2024-04-29",
+            "gameNo": 1,
+            "gameName": "ABC Name",
+            "totalSales": 120693.87,
+            "quantitySold": 11083
+        },
+        {
+            "date": "2024-04-30",
+            "gameNo": 1,
+            "gameName": "ABC Name",
+            "totalSales": 123263.91,
+            "quantitySold": 11319
+        }
+    ]
+}
