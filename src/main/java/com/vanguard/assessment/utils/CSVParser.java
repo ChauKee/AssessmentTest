@@ -120,7 +120,7 @@ public class CSVParser {
         objectMapper.registerModule(new JavaTimeModule());
         List<GameSales> gameSales = results.stream().map(map -> objectMapper.convertValue(map, GameSales.class)).toList();
 
-        System.out.println(objectMapper.writeValueAsString(gameSales));
+//        System.out.println(objectMapper.writeValueAsString(gameSales));
 
     }
 

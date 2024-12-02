@@ -55,7 +55,7 @@ public class AssessmentController {
             @RequestParam(required = false) String toSalePrice,
             @RequestParam(required = false) String fromSalePrice,
             @RequestParam(required = false) String gameNo) {
-        System.out.printf("page=%s, fromDate=%s, toDate=%s, fromSaleProce=%s, toSalePrice=%s, gameNo=%s%n", page, fromDate, toDate, fromSalePrice, toSalePrice, gameNo);
+//        System.out.printf("page=%s, fromDate=%s, toDate=%s, fromSaleProce=%s, toSalePrice=%s, gameNo=%s%n", page, fromDate, toDate, fromSalePrice, toSalePrice, gameNo);
         StringBuilder sb = new StringBuilder();
         if (Objects.nonNull(page) && !ValidationUtils.isValidIntegerRange(page, 1, Integer.MAX_VALUE)) {
             sb.append("page must be digit and equal/larger than 1,");
@@ -134,7 +134,7 @@ public class AssessmentController {
         if (Objects.nonNull(gameNo))
             criteria.setGameNo(Integer.parseInt(gameNo));
 
-        System.out.printf("from=%s, toDate=%s, gameNo=%s%n", fromDate, toDate, gameNo);
+//        System.out.printf("from=%s, toDate=%s, gameNo=%s%n", fromDate, toDate, gameNo);
 
         return ResponseEntity.ok(gameSalesService.getTotalSales(criteria));
     }

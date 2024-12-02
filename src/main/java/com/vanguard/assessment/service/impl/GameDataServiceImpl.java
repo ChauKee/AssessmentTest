@@ -120,7 +120,6 @@ public class GameDataServiceImpl implements GameDataService {
                     futureList.add(asyncBatchInsert(new ArrayList<>(list), insertSql));
                     list.clear();
                     i = 0;
-                    System.out.println("batchInsert " + ++k);
                 }
             }
             if (!list.isEmpty()) {
@@ -129,11 +128,9 @@ public class GameDataServiceImpl implements GameDataService {
             if (!subList.isEmpty()) {
                 futureList.add(asyncSingleInsert(subList));
             }
-            System.out.println("Awaiting");
             int l = 1;
             for (Future<?> future : futureList) {
                 future.get();
-                System.out.println("future " + (l++) + " done");
             }
             asyncUpdateCsvImport(csvImport, CsvImportStatus.COMPLETED);
 

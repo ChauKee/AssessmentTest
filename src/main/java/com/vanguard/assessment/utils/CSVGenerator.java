@@ -26,7 +26,7 @@ public class CSVGenerator {
 
     public static void generateCsv(long amount) throws IOException {
         ClassPathResource cpr = new ClassPathResource("sample.csv");
-        System.out.println(cpr.getFile().getAbsolutePath());
+//        System.out.println(cpr.getFile().getAbsolutePath());
         FileWriter fw = new FileWriter(cpr.getFile().getAbsolutePath());
         StringWriter sw = new StringWriter();
         Random random = new Random();
@@ -76,7 +76,7 @@ public class CSVGenerator {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println(System.currentTimeMillis() - start);
+//        System.out.println(System.currentTimeMillis() - start);
     }
 
 
