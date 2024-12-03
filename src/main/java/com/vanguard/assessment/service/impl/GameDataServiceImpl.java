@@ -99,12 +99,10 @@ public class GameDataServiceImpl implements GameDataService {
             long total = 0;
             int i = 0;
             int j = 0;
-            int k = 0;
             List<List<CSVRecord>> list = new ArrayList<>();
             List<CSVRecord> subList = new ArrayList<>();
             List<Future<?>> futureList = new ArrayList<>();
 
-            StringBuilder sb = new StringBuilder();
             String insertSql = INSERT_COLUMN + (INSERT_VALUE + ",").repeat(insertSqlValueSize-1) + INSERT_VALUE;
             for (CSVRecord record : records) {
                 total++;
@@ -128,7 +126,6 @@ public class GameDataServiceImpl implements GameDataService {
             if (!subList.isEmpty()) {
                 futureList.add(asyncSingleInsert(subList));
             }
-            int l = 1;
             for (Future<?> future : futureList) {
                 future.get();
             }

@@ -1,0 +1,109 @@
+{
+	"info": {
+		"_postman_id": "b53e76af-bda0-4883-ae12-60a6b2cc1c16",
+		"name": "Vanguard Assessment",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Import CSV",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/chauk/OneDrive/Desktop/sample.csv"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8080/import",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"import"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Game Sales",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/getGameSales?fromDate=2024-04-01&toDate=2024-04-30&page=999&fromSalePrice=50&toSalePrice=100",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"getGameSales"
+					],
+					"query": [
+						{
+							"key": "fromDate",
+							"value": "2024-04-01"
+						},
+						{
+							"key": "toDate",
+							"value": "2024-04-30"
+						},
+						{
+							"key": "page",
+							"value": "999"
+						},
+						{
+							"key": "fromSalePrice",
+							"value": "50"
+						},
+						{
+							"key": "toSalePrice",
+							"value": "100"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Total Sales",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/getTotalSales?fromDate=2024-04-01&toDate=2024-04-30&gameNo=1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"getTotalSales"
+					],
+					"query": [
+						{
+							"key": "fromDate",
+							"value": "2024-04-01"
+						},
+						{
+							"key": "toDate",
+							"value": "2024-04-30"
+						},
+						{
+							"key": "gameNo",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -10,8 +10,6 @@ import java.util.List;
 @Repository
 public interface GameDailySalesRepository extends JpaRepository<GameDailySales, LocalDate> {
 
-    List<GameDailySales> findByDateBetweenOrderByDate(LocalDate fromDate, LocalDate toDate);
-
     List<GameDailySales> findByGameNoAndDateBetweenOrderByDate(Integer gameNo, LocalDate fromDate, LocalDate toDate);
 
 }

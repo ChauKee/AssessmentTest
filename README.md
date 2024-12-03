@@ -31,3 +31,9 @@ spring.datasource.password, and spring.jpa.database-platform
 ############### Test Result & Screenshots #################
 ###########################################################
 1. Test results and screenshot are placed under /resources/screenshots_results folder
+
+###########################################################
+################# Endpoint Test Scripts ###################
+###########################################################
+1. Postman test script is located under /resources/postman_scripts folder.
+It can be imported into Postman for endpoint testing/verification.
