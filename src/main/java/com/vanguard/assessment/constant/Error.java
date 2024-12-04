@@ -8,8 +8,7 @@ import lombok.Getter;
 public enum Error {
 
     VALIDATION_ERROR("Validation Error"),
-    INVALID_DATE_FORMAT("Date format must be yyyy-MM-dd"),
-;
+    ;
     private final String description;
 
 }

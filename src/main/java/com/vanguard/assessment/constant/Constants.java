@@ -2,7 +2,7 @@ package com.vanguard.assessment.constant;
 
 public class Constants {
 
-    // Temporary, actual implementation gets from Auth Context current logged in user
+    // Temporary, actual implementation gets from Auth Context current logged-in user
     public static final String LOGGED_IN_USER = "CURRENT_USER";
 
     static class GameName {

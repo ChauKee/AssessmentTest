@@ -3,6 +3,8 @@ package com.vanguard.assessment.utils;
 import com.vanguard.assessment.constant.Game;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.FileWriter;
@@ -16,6 +18,8 @@ import java.util.stream.LongStream;
 
 public class CSVGenerator {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(CSVGenerator.class);
+
     private static final String[] HEADERS = {
             "id", "game_no", "game_name", "game_code", "type",
             "cost_price", "tax", "sale_price", "date_of_sale"
@@ -26,7 +30,7 @@ public class CSVGenerator {
 
     public static void generateCsv(long amount) throws IOException {
         ClassPathResource cpr = new ClassPathResource("sample.csv");
-//        System.out.println(cpr.getFile().getAbsolutePath());
+
         FileWriter fw = new FileWriter(cpr.getFile().getAbsolutePath());
         StringWriter sw = new StringWriter();
         Random random = new Random();
@@ -58,19 +62,19 @@ public class CSVGenerator {
                         miliseconds < 100 ? "0" + miliseconds : String.valueOf(miliseconds);
                 String dateOfSale = String.format("2024-04-%sT%s:%s:%s.%sZ",
                         dayStr, hourStr, minuteStr, secondStr, milisecondStr);
-//                System.out.println(dateOfSale);
+
                 try {
                     printer.printRecord(id, gameNo, gameName, gameCode, type,
                             costPrice, tax, salePrice, dateOfSale);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    LOGGER.error("Encountered error", e);
                 }
             });
         }
     }
 
     public static void main(String[] args) {
-        long start = System.currentTimeMillis();
+//        long start = System.currentTimeMillis();
         try {
             CSVGenerator.generateCsv(1000);
         } catch (Exception e) {
@@ -79,16 +83,4 @@ public class CSVGenerator {
 //        System.out.println(System.currentTimeMillis() - start);
     }
 
-
-
-
-//    1. id (a running number starts with 1)
-//2. game_no (an integer value between 1 to 100)
-//3. game_name (a string value not more than 20 characters)
-//4. game_code (a string value not more than 5 characters)
-//5. type (an integer, 1 = Online | 2 = Offline)
-//6. cost_price (decimal value not more than 100)
-//7. tax (9%)
-//8. sale_price (decimal value, cost_price inclusive of tax)
-//9. date_of_sale (a timestamp of the sale)
 }

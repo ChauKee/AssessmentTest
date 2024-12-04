@@ -8,8 +8,8 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.vanguard.assessment.constant.Constants.GameName;
 import static com.vanguard.assessment.constant.Constants.GameCode;
+import static com.vanguard.assessment.constant.Constants.GameName;
 
 @Getter
 @AllArgsConstructor
@@ -31,9 +31,4 @@ public enum Game {
                 .findFirst();
     }
 
-    public static Optional<Game> fromGameCode(String gameCode) {
-        return Arrays.stream(values())
-                .filter(game -> Objects.equals(game.getCode(), gameCode))
-                .findFirst();
-    }
 }

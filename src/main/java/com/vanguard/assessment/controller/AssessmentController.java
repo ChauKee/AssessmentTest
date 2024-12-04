@@ -5,11 +5,11 @@ import com.vanguard.assessment.dto.AggregateGameSalesQueryResult;
 import com.vanguard.assessment.dto.GameSalesCriteria;
 import com.vanguard.assessment.dto.GameSalesQueryResult;
 import com.vanguard.assessment.dto.ImportCsvResult;
-import com.vanguard.assessment.service.GameSalesService;
 import com.vanguard.assessment.service.GameDataService;
-
+import com.vanguard.assessment.service.GameSalesService;
 import com.vanguard.assessment.utils.ValidationUtils;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
@@ -29,6 +29,8 @@ import static com.vanguard.assessment.utils.DateTimeUtils.DATE_FORMATTER;
 
 @RestController
 public class AssessmentController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AssessmentController.class);
 
     private GameDataService gameDataService;
     private GameSalesService gameSalesService;
@@ -55,7 +57,8 @@ public class AssessmentController {
             @RequestParam(required = false) String toSalePrice,
             @RequestParam(required = false) String fromSalePrice,
             @RequestParam(required = false) String gameNo) {
-//        System.out.printf("page=%s, fromDate=%s, toDate=%s, fromSaleProce=%s, toSalePrice=%s, gameNo=%s%n", page, fromDate, toDate, fromSalePrice, toSalePrice, gameNo);
+        LOGGER.debug("page={}, fromDate={}, toDate={}, fromSalePrice={}, toSalePrice={}, gameNo={}",
+                page, fromDate, toDate, fromSalePrice, toSalePrice, gameNo);
         StringBuilder sb = new StringBuilder();
         if (Objects.nonNull(page) && !ValidationUtils.isValidIntegerRange(page, 1, Integer.MAX_VALUE)) {
             sb.append("page must be digit and equal/larger than 1,");
@@ -134,7 +137,7 @@ public class AssessmentController {
         if (Objects.nonNull(gameNo))
             criteria.setGameNo(Integer.parseInt(gameNo));
 
-//        System.out.printf("from=%s, toDate=%s, gameNo=%s%n", fromDate, toDate, gameNo);
+        LOGGER.debug("fromDate={}, toDate={}, gameNo={}", fromDate, toDate, gameNo);
 
         return ResponseEntity.ok(gameSalesService.getTotalSales(criteria));
     }
