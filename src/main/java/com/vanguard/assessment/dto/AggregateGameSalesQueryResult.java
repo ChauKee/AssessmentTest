@@ -21,5 +21,6 @@ public class AggregateGameSalesQueryResult<T> {
     private BigDecimal totalSales;
     private long quantitySold;
     private List<T> data;
+    private Boolean isJdbc;
 
 }

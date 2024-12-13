@@ -52,16 +52,21 @@ public class AssessmentController {
     @GetMapping("${app.endpoint.game.getGameSales}")
     public ResponseEntity<?> getGameSales(
             @RequestParam(required = false) String page,
+            @RequestParam(required = false) String pageSize,
             @RequestParam(required = false) String fromDate,
             @RequestParam(required = false) String toDate,
             @RequestParam(required = false) String toSalePrice,
             @RequestParam(required = false) String fromSalePrice,
-            @RequestParam(required = false) String gameNo) {
-        LOGGER.debug("page={}, fromDate={}, toDate={}, fromSalePrice={}, toSalePrice={}, gameNo={}",
-                page, fromDate, toDate, fromSalePrice, toSalePrice, gameNo);
+            @RequestParam(required = false) String gameNo,
+            @RequestParam(required = false) String isJdbc) {
+        LOGGER.info("page={}, pageSize={}, fromDate={}, toDate={}, fromSalePrice={}, toSalePrice={}, gameNo={}, isJdbc={}",
+                page, pageSize, fromDate, toDate, fromSalePrice, toSalePrice, gameNo, isJdbc);
         StringBuilder sb = new StringBuilder();
         if (Objects.nonNull(page) && !ValidationUtils.isValidIntegerRange(page, 1, Integer.MAX_VALUE)) {
             sb.append("page must be digit and equal/larger than 1,");
+        }
+        if (Objects.nonNull(page) && !ValidationUtils.isValidIntegerRange(page, 1, Integer.MAX_VALUE)) {
+            sb.append("pageSize must be digit and equal/larger than 1,");
         }
         if (Objects.nonNull(fromDate) && !ValidationUtils.isValidDateFormat(fromDate, DATE_FORMATTER)) {
             sb.append("fromDate must be in yyyy-MM-dd format,");
@@ -100,17 +105,19 @@ public class AssessmentController {
             criteria.setToDate(LocalDate.parse(toDate, DATE_FORMATTER));
         if (Objects.nonNull(gameNo))
             criteria.setGameNo(Integer.parseInt(gameNo));
+        criteria.setJdbc(Boolean.parseBoolean(isJdbc));
 
-        Pageable pageable = PageRequest.of(page == null ? 0 : Integer.parseInt(page) - 1, pageSize);
+        Pageable pageable = PageRequest.of(page == null ? 0 : Integer.parseInt(page) - 1, pageSize == null ? this.pageSize : Integer.parseInt(pageSize));
 
         return ResponseEntity.ok(gameSalesService.getGameSales(criteria, pageable));
     }
 
     @GetMapping("${app.endpoint.game.getTotalSales}")
     public ResponseEntity<?> getTotalSales(
-            @RequestParam String fromDate,
-            @RequestParam String toDate,
-            @RequestParam(required = false) String gameNo) {
+            @RequestParam(required = false) String fromDate,
+            @RequestParam(required = false) String toDate,
+            @RequestParam(required = false) String gameNo,
+            @RequestParam(required = false) String isJdbc) {
         StringBuilder sb = new StringBuilder();
         if (Objects.nonNull(fromDate) && !ValidationUtils.isValidDateFormat(fromDate, DATE_FORMATTER)) {
             sb.append("fromDate must be in yyyy-MM-dd format,");
@@ -136,8 +143,9 @@ public class AssessmentController {
             criteria.setToDate(LocalDate.parse(toDate, DATE_FORMATTER));
         if (Objects.nonNull(gameNo))
             criteria.setGameNo(Integer.parseInt(gameNo));
+        criteria.setJdbc(Boolean.parseBoolean(isJdbc));
 
-        LOGGER.debug("fromDate={}, toDate={}, gameNo={}", fromDate, toDate, gameNo);
+        LOGGER.info("fromDate={}, toDate={}, gameNo={}, isJdbc={}", fromDate, toDate, gameNo, isJdbc);
 
         return ResponseEntity.ok(gameSalesService.getTotalSales(criteria));
     }

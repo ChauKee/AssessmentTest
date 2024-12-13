@@ -48,19 +48,24 @@ public class GameSalesServiceImpl implements GameSalesService {
         // if fromDate is missing, by default we use 1 week before from toDate
         LocalDate fromDate = Objects.isNull(criteria.getFromDate()) ? toDate.minusDays(7) : criteria.getFromDate();
 
-        Page<GameSales> results = gameSalesRepository.findBySalePriceBetweenAndDateOfSaleBetweenOrderById(
+        Page<GameSales> results = criteria.isJdbc() ?
+                gameSalesRepository.jdbcFindBySalePriceBetweenAndDateOfSaleBetweenOrderById(salePriceStart, salePriceEnd,fromDate.atStartOfDay(), toDate.plusDays(1).atStartOfDay().minusNanos(1), page) :
+                gameSalesRepository.findBySalePriceBetweenAndDateOfSaleBetweenOrderById(
                 salePriceStart, salePriceEnd, fromDate.atStartOfDay(), toDate.plusDays(1).atStartOfDay().minusNanos(1), page);
-        List<GameSalesDTO> dtos = results.stream().map(GameSalesServiceImpl::toDTO).toList();
+        List<GameSalesDTO> gameSales = results.stream().map(GameSalesServiceImpl::toDTO).toList();
         GameSalesQueryResult<GameSalesDTO> result = GameSalesQueryResult.<GameSalesDTO>builder()
-                .data(dtos)
+                .data(gameSales)
                 .fromDate(fromDate.format(DateTimeUtils.DATE_FORMATTER)) // return resolved fromDate to FE
                 .toDate(toDate.format(DateTimeUtils.DATE_FORMATTER)) // return resolved toDate to FE
+                .fromSalePrice(criteria.getFromSalePrice())
+                .toSalePrice(criteria.getToSalePrice())
                 .page(PageDTO.builder()
                         .page(results.getNumber() + 1) // add 1 back because FE is 1-based, backend is zero-based
                         .pageSize(results.getSize())
                         .totalPages(results.getTotalPages())
                         .total(results.getTotalElements())
                         .build()) // return page object for FE pagination feature
+                .isJdbc(criteria.isJdbc())
                 .build();
 
         return result;
@@ -91,23 +96,29 @@ public class GameSalesServiceImpl implements GameSalesService {
                 AggregateGameSalesQueryResult.<AggregatedGameSalesDTO>builder()
                         .fromDate(Objects.nonNull(fromDate) ? fromDate.format(DATE_FORMATTER) : null)
                         .toDate(Objects.nonNull(toDate) ? toDate.format(DATE_FORMATTER) : null)
-                        .gameNo(gameNo);
+                        .gameNo(gameNo)
+                        .isJdbc(criteria.isJdbc());
 
         toDate = Objects.isNull(toDate) ? LocalDate.now() : toDate;
         fromDate = Objects.isNull(fromDate) ? toDate.minusDays(7) : fromDate;
         if (Objects.nonNull(gameNo)) {
-            List<AggregatedGameSalesDTO> gameDailySales = gameDailySalesRepository.findByGameNoAndDateBetweenOrderByDate(
-                    gameNo, fromDate, toDate).stream().map(this::toAggregateDTO).toList();
+            List<GameDailySales> results = criteria.isJdbc() ?
+                    gameDailySalesRepository.jdbcFindByGameNoAndDateBetweenOrderByDate(gameNo, fromDate, toDate) :
+                    gameDailySalesRepository.findByGameNoAndDateBetweenOrderByDate(gameNo, fromDate, toDate);
+            List<AggregatedGameSalesDTO> gameDailySales = results.stream().map(this::toAggregateDTO).toList();
             builder.data(gameDailySales);
             builder.totalSales(gameDailySales.stream().map(AggregatedGameSalesDTO::getTotalSales).reduce(BigDecimal.ZERO, BigDecimal::add));
             builder.quantitySold(gameDailySales.stream().map(AggregatedGameSalesDTO::getQuantitySold).reduce(0L, Long::sum));
         } else {
-            List<AggregatedGameSalesDTO> gameDailySales = totalDailySalesRepository.findByDateBetweenOrderByDate(
-                    fromDate, toDate).stream().map(this::toAggregateDTO).toList();
+            List<TotalDailySales> results = criteria.isJdbc() ? totalDailySalesRepository.jdbcFindByDateBetweenOrderByDate(
+                    fromDate, toDate) : totalDailySalesRepository.findByDateBetweenOrderByDate(fromDate, toDate);
+            List<AggregatedGameSalesDTO> gameDailySales = results.stream().map(this::toAggregateDTO).toList() ;
             builder.data(gameDailySales);
             builder.totalSales(gameDailySales.stream().map(AggregatedGameSalesDTO::getTotalSales).reduce(BigDecimal.ZERO, BigDecimal::add));
             builder.quantitySold(gameDailySales.stream().map(AggregatedGameSalesDTO::getQuantitySold).reduce(0L, Long::sum));
         }
+        builder.fromDate(fromDate.format(DateTimeUtils.DATE_FORMATTER));
+        builder.toDate(toDate.format(DateTimeUtils.DATE_FORMATTER));
         return builder.build();
     }
 

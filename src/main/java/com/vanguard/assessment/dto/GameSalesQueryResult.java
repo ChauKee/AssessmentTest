@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Builder
@@ -18,7 +19,7 @@ public class GameSalesQueryResult<T> {
     private List<T> data;
     private String fromDate;
     private String toDate;
-    private String fromSalePrice;
-    private String toSalePrice;
-
+    private BigDecimal fromSalePrice;
+    private BigDecimal toSalePrice;
+    private Boolean isJdbc;
 }

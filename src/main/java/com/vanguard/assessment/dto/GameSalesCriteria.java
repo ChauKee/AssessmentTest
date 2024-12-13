@@ -14,5 +14,6 @@ public class GameSalesCriteria {
     private Integer gameNo;
     private BigDecimal fromSalePrice;
     private BigDecimal toSalePrice;
+    private boolean isJdbc;
 
 }
