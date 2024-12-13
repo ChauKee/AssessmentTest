@@ -39,7 +39,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/getGameSales?fromDate=2024-04-01&toDate=2024-04-30&page=999&fromSalePrice=50&toSalePrice=100",
+					"raw": "localhost:8080/getGameSales?fromDate=2024-04-01&toDate=2024-04-30&page=1&fromSalePrice=0&toSalePrice=1000&isJdbc=true",
 					"host": [
 						"localhost"
 					],
@@ -58,15 +58,24 @@
 						},
 						{
 							"key": "page",
-							"value": "999"
+							"value": "1"
 						},
 						{
 							"key": "fromSalePrice",
-							"value": "50"
+							"value": "0"
 						},
 						{
 							"key": "toSalePrice",
-							"value": "100"
+							"value": "1000"
+						},
+						{
+							"key": "isJdbc",
+							"value": "true"
+						},
+						{
+							"key": "pageSize",
+							"value": "100",
+							"disabled": true
 						}
 					]
 				}
@@ -79,7 +88,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/getTotalSales?fromDate=2024-04-01&toDate=2024-04-30&gameNo=1",
+					"raw": "localhost:8080/getTotalSales?fromDate=2024-04-01&toDate=2024-04-30&gameNo=3&isJdbc=true",
 					"host": [
 						"localhost"
 					],
@@ -98,7 +107,11 @@
 						},
 						{
 							"key": "gameNo",
-							"value": "1"
+							"value": "3"
+						},
+						{
+							"key": "isJdbc",
+							"value": "true"
 						}
 					]
 				}
